@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Shannon Steen — Thérapie psycho-corporelle</title>
+<meta name="description" content="Shannon Steen, thérapeute psycho-corporelle à Woluwe-Saint-Lambert. Accompagnement psycho-corporel, massage et soins énergétiques.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="top__nom" href="#debut">Shannon Steen</a>
+  <a class="bouton bouton--petit" href="#contact">Rendez-vous</a>
+</header>
+
+<main>
+
+  <!-- Identité : le cercle du logo + les infos essentielles -->
+  <section class="ident" id="debut">
+    <h1>Shannon Steen</h1>
+    <span class="ident__filet" aria-hidden="true"></span>
+    <p class="ident__titre">Accompagnement psycho-corporel</p>
+    <p class="ident__lieu">Woluwe-Saint-Lambert</p>
+    <a class="ident__fleche" href="#schema" aria-label="Descendre">
+      <svg viewBox="0 0 24 40" aria-hidden="true"><path d="M12 2v34M3 27l9 9 9-9"/></svg>
+    </a>
+  </section>
+
+  <!-- Infographie : les plans qui se recoupent -->
+  <section class="schema" id="schema" aria-label="Les plans du travail psycho-corporel">
+    <figure class="constellation">
+      <svg viewBox="-445 -472 890 944" role="img" aria-labelledby="constellation-titre">
+        <title id="constellation-titre">Le mental, le corps, les émotions, les traumas, l'amour et le quotidien se recoupent en un même centre.</title>
+        <defs>
+          <!-- Effet risographie : bords d'encre légèrement irréguliers + grain dans la densité de l'encre
+               (le grain fonce l'encre par endroits, il ne perce pas de trous blancs) -->
+          <filter id="grain" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="2" result="ondes"/>
+            <feDisplacementMap in="SourceGraphic" in2="ondes" scale="4" xChannelSelector="R" yChannelSelector="G" result="bords"/>
+            <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="11" result="bruit"/>
+            <feColorMatrix in="bruit" type="matrix" values=".45 0 0 0 .72  .45 0 0 0 .72  .45 0 0 0 .72  0 0 0 0 1" result="gris"/>
+            <feBlend in="bords" in2="gris" mode="multiply" result="encre"/>
+            <feComposite in="encre" in2="bords" operator="in"/>
+          </filter>
+        </defs>
+        <g class="disques" filter="url(#grain)">
+          <g class="disque" style="--a:-90deg; --d:226; --c:var(--c-rouge)">
+            <circle class="calage" cx="8" cy="-232" r="235"/>
+            <circle cx="0" cy="-226" r="235"/>
+          </g>
+          <g class="disque" style="--a:-30deg; --d:226; --c:var(--c-orange)">
+            <circle class="calage" cx="203" cy="-119" r="235"/>
+            <circle cx="195" cy="-113" r="235"/>
+          </g>
+          <g class="disque" style="--a:30deg; --d:226; --c:var(--c-jaune)">
+            <circle class="calage" cx="203" cy="107" r="235"/>
+            <circle cx="195" cy="113" r="235"/>
+          </g>
+          <g class="disque" style="--a:90deg; --d:226; --c:var(--c-vert)">
+            <circle class="calage" cx="8" cy="220" r="235"/>
+            <circle cx="0" cy="226" r="235"/>
+          </g>
+          <g class="disque" style="--a:150deg; --d:226; --c:var(--c-bleu)">
+            <circle class="calage" cx="-187" cy="107" r="235"/>
+            <circle cx="-195" cy="113" r="235"/>
+          </g>
+          <g class="disque" style="--a:210deg; --d:226; --c:var(--c-violet)">
+            <circle class="calage" cx="-187" cy="-119" r="235"/>
+            <circle cx="-195" cy="-113" r="235"/>
+          </g>
+        </g>
+        <!-- Les mots sur un calque à part, non mélangé ; le cercle invisible donne la même boîte que le disque -->
+        <g class="etiquettes">
+          <g class="etiquette" style="--a:-90deg; --d:226">
+            <circle cx="0" cy="-226" r="235" fill="none"/>
+            <text x="0" y="-331">le mental</text>
+          </g>
+          <g class="etiquette" style="--a:-30deg; --d:226">
+            <circle cx="195" cy="-113" r="235" fill="none"/>
+            <text x="295" y="-160">le corps</text>
+          </g>
+          <g class="etiquette" style="--a:30deg; --d:226">
+            <circle cx="195" cy="113" r="235" fill="none"/>
+            <text x="295" y="180">les émotions</text>
+          </g>
+          <g class="etiquette" style="--a:90deg; --d:226">
+            <circle cx="0" cy="226" r="235" fill="none"/>
+            <text x="0" y="351">les traumas</text>
+          </g>
+          <g class="etiquette" style="--a:150deg; --d:226">
+            <circle cx="-195" cy="113" r="235" fill="none"/>
+            <text x="-295" y="180">l'amour</text>
+          </g>
+          <g class="etiquette" style="--a:210deg; --d:226">
+            <circle cx="-195" cy="-113" r="235" fill="none"/>
+            <text x="-295" y="-160">le quotidien</text>
+          </g>
+        </g>
+      </svg>
+    </figure>
+    <a class="ident__fleche schema__fleche" href="#consultations" aria-label="Descendre">
+      <svg viewBox="0 0 24 40" aria-hidden="true"><path d="M12 2v34M3 27l9 9 9-9"/></svg>
+    </a>
+  </section>
+
+  <!-- Consultations -->
+  <section class="bloc" id="consultations">
+    <h2>Consultations</h2>
+    <p>Je reçois en consultation individuelle, notamment pour :</p>
+    <ul class="liste">
+      <li>anxiété, stress</li>
+      <li>épuisement, burn-out</li>
+      <li>deuil, séparation</li>
+      <li>traumatismes</li>
+      <li>difficultés relationnelles ou affectives</li>
+      <li>tensions et douleurs liées au stress</li>
+    </ul>
+    <p class="consultations__cta"><a class="bouton" href="#contact">Prendre rendez-vous</a></p>
+  </section>
+
+  <!-- Approche : le schéma des intersections, la personne au centre -->
+  <section class="bloc" id="approche">
+    <h2>Approche</h2>
+    <p>Le travail psycho-corporel associe l'échange à une approche par le corps : respiration, attention aux sensations, mouvement, massage. Le travail corporel est toujours proposé, jamais imposé.</p>
+    <p>Ce qu'on vit touche plusieurs plans à la fois, qui se recoupent. La séance part de ce que vous apportez.</p>
+  </section>
+
+  <!-- Déroulement -->
+  <section class="bloc" id="deroulement">
+    <h2>Déroulement</h2>
+    <dl class="tableau">
+      <dt>Premier rendez-vous</dt>
+      <dd>Un entretien pour faire le point sur votre demande et convenir ensemble d'un suivi.</dd>
+      <dt>Séances</dt>
+      <dd>1 heure. Fréquence à définir ensemble, en général toutes les une à deux semaines.</dd>
+      <dt>Confidentialité</dt>
+      <dd>Les consultations sont soumises au secret professionnel.</dd>
+    </dl>
+  </section>
+
+  <!-- Parcours -->
+  <section class="bloc" id="parcours">
+    <h2>Parcours</h2>
+    <ul class="liste">
+      <li>Licence en sciences psychologiques et de l'éducation, ULB</li>
+      <li>Thérapeute psycho-corporelle EMTE, formation de 4 ans à l'école Atmaram</li>
+      <li>Formatrice et superviseuse EMTE à l'école Atmaram</li>
+      <li>Expérience en milieux socio-éducatif, psychiatrique et psychothérapeutique</li>
+    </ul>
+  </section>
+
+  <!-- Infos pratiques et contact -->
+  <section class="bloc" id="contact">
+    <h2>Infos pratiques</h2>
+    <dl class="tableau">
+      <dt>Téléphone</dt>
+      <dd><a href="tel:+32474696812">0474/69.68.12</a>. Si je suis en séance, laissez un message, je vous rappelle.</dd>
+      <dt>E-mail</dt>
+      <dd><a href="mailto:contact@exemple.be">contact@exemple.be</a></dd>
+      <dt>Adresse</dt>
+      <dd>[Adresse], 1200 Woluwe-Saint-Lambert</dd>
+      <dt>Tarif</dt>
+      <dd>Séance individuelle (1 h) : [tarif] €<br>Massage et soins énergétiques (1 h) : [tarif] €</dd>
+      <dt>Annulation</dt>
+      <dd>Toute séance non annulée 48 h à l'avance est due.</dd>
+    </dl>
+  </section>
+
+</main>
+
+<footer class="pied">
+  <img class="pied__logo" src="assets/logo-cercle.png" alt="">
+  <p class="pied__nom">Shannon Steen</p>
+  <p>Accompagnement psycho-corporel, massage et soins énergétiques</p>
+  <address>
+    [Adresse], 1200 Woluwe-Saint-Lambert<br>
+    <a href="tel:+32474696812">0474/69.68.12</a> · <a href="mailto:contact@exemple.be">contact@exemple.be</a>
+  </address>
+</footer>
+
+<script>
+  // L'en-tête descend une fois le hero dépassé
+  const entete = document.querySelector('.top');
+  new IntersectionObserver(([e]) => {
+    entete.classList.toggle('top--visible', !e.isIntersecting && e.boundingClientRect.top < 0);
+  }).observe(document.querySelector('.ident__fleche'));
+
+  // Défilement doux vers les ancres : lent, avec un ralenti en fin de course
+  // départ en douceur, longue décélération à la fin
+  const ralenti = t => t < .3 ? (t / .3) ** 2 * .39 : .39 + .61 * (1 - (1 - (t - .3) / .7) ** 3);
+  document.querySelectorAll('a[href^="#"]').forEach(lien => lien.addEventListener('click', ev => {
+    const cible = document.querySelector(lien.getAttribute('href'));
+    if (!cible || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    ev.preventDefault();
+    const depart = scrollY;
+    const arrivee = cible.getBoundingClientRect().top + scrollY - (parseFloat(getComputedStyle(cible).scrollMarginTop) || 0);
+    const duree = Math.min(4200, 2600 + Math.abs(arrivee - depart) * 0.8);
+    const t0 = performance.now();
+    requestAnimationFrame(function pas(t) {
+      const p = Math.min(1, (t - t0) / duree);
+      scrollTo(0, depart + (arrivee - depart) * ralenti(p));
+      if (p < 1) requestAnimationFrame(pas);
+    });
+  }));
+</script>
+
+</body>
+</html>

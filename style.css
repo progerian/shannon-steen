@@ -1,0 +1,220 @@
+/* Shannon Steen — couleurs et typo tirées de la carte de visite */
+:root {
+  --papier: #ffffff;
+  --blanc: #ffffff;
+  --encre: #1e1a17;
+  --gris: #5f5750;
+  --filet: rgba(30, 26, 23, .12);
+  --terre: #c5592f;   /* orange des tortues / du numéro */
+  --violet: #8f7cb8;  /* lavande, cercle des émotions */
+  --vert: #6fa58a;    /* sauge, cercle du quotidien */
+  /* Couleurs du schéma : 6 couleurs des chakras, adoucies (pas trop saturées) */
+  --c-rouge: #d9776f;
+  --c-orange: #e39a62;
+  --c-jaune: #e3c56b;
+  --c-vert: #86b88f;
+  --c-bleu: #7fb0cf;
+  --c-violet: #a88bc7;
+  --eau: #a9c4c0;     /* bleu pâle des poissons */
+  --serif: "EB Garamond", Garamond, "Times New Roman", serif;
+  --gouttiere: 24px;
+  --largeur: 1088px;  /* largeur commune à tous les blocs */
+  --col-titre: 240px; /* colonne des titres de section */
+}
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: 64px; }
+body {
+  margin: 0;
+  background: var(--papier);
+  color: var(--encre);
+  font: 400 1.1875rem/1.6 var(--serif);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+h1, h2 { font-weight: 400; line-height: 1.15; margin: 0; }
+h2 { font-size: 1.9rem; margin-bottom: 20px; }
+
+/* ---------- En-tête ---------- */
+.top {
+  position: fixed; inset: 0 0 auto 0; z-index: 10;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 24px;
+  padding: 14px 20px;
+  background: var(--papier);
+  border-bottom: 1px solid rgba(30, 26, 23, .06);
+  align-items: center;
+  transform: translateY(-100%);
+  transition: transform 1.4s cubic-bezier(.22, .61, .36, 1); /* descente lente et douce */
+}
+.top--visible { transform: none; }
+.top a { text-decoration: none; }
+.top__nom { font-size: 1.25rem; }
+
+/* ---------- Identité : texte à gauche, logo à droite ---------- */
+.ident {
+  width: min(100% - 2 * var(--gouttiere), var(--largeur)); margin: 0 auto;
+  position: relative;
+  min-height: 100vh; min-height: 100svh; /* plein écran quelle que soit la résolution */
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 48px 0;
+  text-align: center;
+}
+.ident h1 { font-size: 2.6rem; line-height: 1.05; }
+.ident__filet {
+  display: block; width: 48px; height: 1px;
+  margin: 28px auto; background: var(--terre);
+}
+.ident__titre { margin: 0; font-size: 1.35rem; line-height: 1.4; }
+.ident__lieu { margin: 6px 0 0; color: var(--gris); }
+/* Flèche dans un rond qui pulse une seule fois à l'arrivée : invite à cliquer */
+.ident__fleche {
+  display: grid; place-items: center;
+  width: 64px; height: 64px; margin-top: 80px;
+  border: 1px solid var(--terre); border-radius: 50%;
+  color: var(--terre);
+  animation: appel 2.4s ease-in-out .8s 1 both;
+  transition: background .6s, color .6s;
+}
+.ident__fleche svg { width: 16px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+.ident__fleche:hover { background: var(--terre); color: var(--blanc); animation-play-state: paused; }
+@keyframes appel {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 color-mix(in srgb, var(--terre) 35%, transparent); }
+  50%      { opacity: .45; box-shadow: 0 0 0 12px transparent; }
+}
+.bouton {
+  display: inline-block; margin-top: 20px;
+  padding: 8px 22px; border-radius: 999px;
+  border: 1px solid var(--terre);
+  background: var(--terre); color: var(--blanc);
+  text-decoration: none;
+  transition: background .5s, color .5s;
+}
+.bouton:hover { background: transparent; color: var(--terre); }
+.consultations__cta { margin-top: 32px !important; }
+.bouton--petit { margin-top: 0; padding: 4px 16px; font-size: 1rem; }
+/* Dans l'en-tête : contour seul par défaut, plein au survol (plus léger) */
+.top .bouton { background: transparent; color: var(--terre); }
+.top .bouton:hover { background: var(--terre); color: var(--blanc); }
+
+/* ---------- Blocs ---------- */
+.bloc {
+  width: min(100% - 2 * var(--gouttiere), var(--largeur)); margin: 0 auto;
+  padding: 48px 0;
+  border-top: 1px solid var(--filet);
+}
+.bloc p { max-width: 36em; margin: 0 0 1em; }
+
+.liste { padding: 0 0 0 1.1em; margin: 0; }
+.liste li { padding: 2px 0; }
+.liste li::marker { color: var(--terre); }
+
+.tableau { margin: 0; }
+.tableau dt { color: var(--gris); font-size: 1rem; padding-top: 14px; }
+.tableau dd { margin: 0; padding-bottom: 14px; border-bottom: 1px solid var(--filet); }
+.tableau dd:last-of-type { border-bottom: 0; }
+.tableau a { color: var(--terre); }
+
+/* ---------- Approche : constellation de cercles ---------- */
+/* Section dédiée sous le hero : le schéma en grand */
+/* Deuxième écran plein écran : le schéma, centré, avec sa flèche vers la suite */
+section[id] { scroll-margin-top: 64px; } /* place pour l'en-tête fixe */
+.schema {
+  width: min(100% - 2 * var(--gouttiere), var(--largeur)); margin: 0 auto;
+  min-height: 100vh; min-height: 100svh;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  padding: calc(64px + 3svh) 0 24px; /* 64px = en-tête fixe ; le schéma se place dans le haut de l'écran */
+  scroll-margin-top: 0;
+}
+/* Mobile : le schéma prend presque toute la largeur de l'écran */
+@media (max-width: 767px) {
+  /* schéma collé sous l'en-tête et flèche plus proche : la flèche reste visible même sur un écran court */
+  .schema { width: 100%; padding-top: 72px; }
+  .constellation { width: min(100% - 24px, calc(100svh - 72px - 32px - 64px - 40px)); }
+  .schema__fleche { margin-top: 32px; }
+}
+.constellation {
+  margin: 0 auto;
+  /* le schéma tient toujours dans l'écran, avec la flèche en dessous */
+  width: min(100%, 920px, calc(100svh - 260px));
+}
+.schema__fleche { margin-top: 64px; animation: none; }
+@supports (animation-timeline: view()) {
+  .constellation { view-timeline: --constel; }
+}
+.constellation svg { display: block; width: 100%; height: auto; overflow: visible; }
+.etiquette { transform-box: fill-box; transform-origin: center; }
+.etiquettes { pointer-events: none; }
+.disque {
+  transform-box: fill-box; transform-origin: center;
+  /* vrai mélange « encre » : le mode de fusion doit être sur le groupe animé,
+     sinon chaque cercle reste isolé dans son calque et ne se mélange pas aux autres */
+  mix-blend-mode: multiply;
+}
+.disque circle {
+  fill: var(--c);
+  fill-opacity: .92;
+  transition: fill-opacity .8s ease;
+}
+.disque:hover circle { fill-opacity: 1; }
+/* liseré de calage : la même encre, plus soutenue, légèrement décalée */
+.disque .calage { fill: color-mix(in oklab, var(--c), #6b2a12 22%); fill-opacity: 1; }
+.etiquette text {
+  font: italic 400 42px var(--serif);
+  fill: var(--blanc);
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+/* Libellés plus grands sur petit écran (le schéma est réduit) */
+@media (max-width: 767px) {
+  .etiquette text { font-size: 46px; }
+}
+
+/* Deux phases sur tout le passage du schéma à l'écran :
+   1. arrivée : de loin, en grandissant, jusqu'à la position ouverte (0 → 50 %)
+   2. dérive très lente vers le centre jusqu'à la sortie de l'écran (50 → 100 %),
+      sans jamais aller jusqu'à la fusion */
+@supports (animation-timeline: view()) {
+  .disque, .etiquette {
+    animation: arrive linear both;
+    animation-timeline: --constel;
+    animation-range: cover 0% cover 100%;
+  }
+}
+@keyframes arrive {
+  0%   { transform: translate(calc(cos(var(--a)) * 320px), calc(sin(var(--a)) * 320px)) scale(.25); opacity: 0; }
+  20%  { opacity: 1; }
+  50%  { transform: none; opacity: 1; }
+  100% { transform: translate(calc(cos(var(--a)) * var(--d) * -.3px), calc(sin(var(--a)) * var(--d) * -.3px)); opacity: 1; }
+}
+
+/* ---------- Parcours ---------- */
+
+.pied {
+  text-align: center; padding: 64px var(--gouttiere) 72px;
+  color: var(--gris);
+  border-top: 1px solid var(--filet);
+}
+.pied__logo { width: 140px; margin: 0 auto 20px; clip-path: circle(48.5% at 50% 50%); filter: brightness(1.05) contrast(1.06); }
+.pied p { margin: 0; }
+.pied__nom { font-size: 1.5rem; color: var(--encre); }
+.pied address { font-style: normal; margin-top: 16px; line-height: 1.7; }
+.pied a { color: var(--terre); text-decoration: none; }
+
+
+/* ---------- Tablette et + ---------- */
+@media (min-width: 768px) {
+  :root { --gouttiere: 48px; }
+  .ident h1 { font-size: 4.2rem; }
+  .ident__titre { font-size: 1.7rem; }
+  .bloc { display: grid; grid-template-columns: var(--col-titre) 1fr; column-gap: 48px; padding: 64px 0; }
+  .bloc > h2 { grid-row: span 10; }
+  .tableau { display: grid; grid-template-columns: 200px 1fr; }
+  .tableau dt, .tableau dd { padding: 14px 0; border-bottom: 1px solid var(--filet); }
+  .tableau dt:last-of-type { border-bottom: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; }
+}
