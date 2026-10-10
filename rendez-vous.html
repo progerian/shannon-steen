@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Rendez-vous — Shannon Steen</title>
+<meta name="description" content="Demande de rendez-vous auprès de Shannon Steen, accompagnement psycho-corporel à Woluwe-Saint-Lambert.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-rdv">
+
+<header class="top top--visible">
+  <a class="top__nom" href="index.html">Shannon Steen</a>
+  <a class="top__retour" href="index.html">Retour au site</a>
+</header>
+
+<main class="rdv">
+
+  <div class="rdv__intro">
+    <h1>Demander un rendez-vous</h1>
+    <p>Cochez les moments où vous êtes disponible en général. Je vous rappelle pour convenir ensemble d'une heure précise.</p>
+    <p class="rdv__tel">Vous préférez appeler ? <a href="tel:+32474696812">0474/69.68.12</a></p>
+  </div>
+
+  <form class="rdv__form" id="demande" novalidate>
+
+    <fieldset class="dispo">
+      <legend>Vos disponibilités</legend>
+      <p class="aide" id="aide-dispo">Une case ou plusieurs, comme cela vous arrange.</p>
+      <div class="grille" role="group" aria-describedby="aide-dispo">
+        <span></span>
+        <span class="grille__moment">Matin</span>
+        <span class="grille__moment">Après-midi</span>
+        <span class="grille__moment">Soir</span>
+        <!-- lignes générées plus bas : une par jour -->
+      </div>
+      <p class="erreur" id="erreur-dispo" hidden>Cochez au moins un moment.</p>
+    </fieldset>
+
+    <fieldset class="coord">
+      <legend>Vos coordonnées</legend>
+      <div class="champ">
+        <label for="prenom">Prénom</label>
+        <input id="prenom" name="prenom" type="text" autocomplete="given-name" required>
+      </div>
+      <div class="champ">
+        <label for="telephone">Téléphone</label>
+        <input id="telephone" name="telephone" type="tel" autocomplete="tel" inputmode="tel" required>
+      </div>
+      <div class="champ">
+        <label for="email">E-mail <span class="facultatif">facultatif</span></label>
+        <input id="email" name="email" type="email" autocomplete="email">
+      </div>
+      <div class="champ">
+        <label for="message">Un mot <span class="facultatif">facultatif</span></label>
+        <textarea id="message" name="message" rows="3"></textarea>
+        <p class="aide">Inutile de détailler votre demande, nous en parlerons de vive voix.</p>
+      </div>
+      <div class="champ champ--choix">
+        <input id="premiere" name="premiere" type="checkbox">
+        <label for="premiere">C'est une première consultation</label>
+      </div>
+      <p class="erreur" id="erreur-coord" hidden>Indiquez votre prénom et un numéro où vous joindre.</p>
+    </fieldset>
+
+    <div class="rdv__envoi">
+      <button class="bouton" type="submit">Envoyer ma demande</button>
+      <p class="aide">Vos coordonnées servent uniquement à vous recontacter.</p>
+    </div>
+  </form>
+
+  <section class="merci" id="merci" hidden tabindex="-1" aria-live="polite">
+    <h2>Merci, votre demande est envoyée.</h2>
+    <p>Je vous rappelle dans les prochains jours au <strong id="merci-tel"></strong>.</p>
+    <p class="merci__recap">Vos disponibilités : <span id="merci-dispo"></span></p>
+    <a class="bouton" href="index.html">Retour au site</a>
+  </section>
+
+</main>
+
+<footer class="pied">
+  <img class="pied__logo" src="assets/logo-cercle.png" alt="">
+  <p class="pied__nom">Shannon Steen</p>
+  <p>Accompagnement psycho-corporel, massage et soins énergétiques</p>
+  <address>
+    [Adresse], 1200 Woluwe-Saint-Lambert<br>
+    <a href="tel:+32474696812">0474/69.68.12</a> · <a href="mailto:contact@exemple.be">contact@exemple.be</a>
+  </address>
+</footer>
+
+<script>
+  // Grille : une ligne par jour, une case à cocher par moment de la journée
+  const jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+  const moments = ['Matin', 'Après-midi', 'Soir'];
+  const grille = document.querySelector('.grille');
+  jours.forEach(jour => {
+    const nom = document.createElement('span');
+    nom.className = 'grille__jour';
+    nom.textContent = jour;
+    grille.append(nom);
+    moments.forEach(moment => {
+      const id = (jour + '-' + moment).toLowerCase().normalize('NFD').replace(/[^a-z-]/g, '');
+      const case_ = document.createElement('label');
+      case_.className = 'case';
+      case_.htmlFor = id;
+      case_.innerHTML = `<input type="checkbox" id="${id}" name="dispo" value="${jour} ${moment.toLowerCase()}"><span class="case__rond" aria-hidden="true"></span><span class="sr">${jour} ${moment.toLowerCase()}</span>`;
+      grille.append(case_);
+    });
+  });
+
+  // Démo : pas encore d'envoi réel (il faudra brancher l'adresse de Shannon via Formspree ou Web3Forms)
+  const form = document.getElementById('demande');
+  form.addEventListener('submit', ev => {
+    ev.preventDefault();
+    const choisis = [...form.querySelectorAll('input[name="dispo"]:checked')].map(c => c.value);
+    const prenom = form.prenom.value.trim(), tel = form.telephone.value.trim();
+    document.getElementById('erreur-dispo').hidden = choisis.length > 0;
+    document.getElementById('erreur-coord').hidden = Boolean(prenom && tel);
+    if (!choisis.length || !prenom || !tel) return;
+    document.getElementById('merci-tel').textContent = tel;
+    document.getElementById('merci-dispo').textContent = choisis.join(', ');
+    form.hidden = true;
+    const merci = document.getElementById('merci');
+    merci.hidden = false;
+    merci.focus();
+    merci.scrollIntoView({ block: 'start' });
+  });
+</script>
+</body>
+</html>

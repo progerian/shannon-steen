@@ -219,3 +219,84 @@ section.schema { scroll-margin-top: 0; } /* l'écran du schéma s'aligne pile su
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; }
 }
+
+/* ---------- Page « Demander un rendez-vous » ---------- */
+.top__retour { color: var(--gris); }
+.top__retour:hover { color: var(--encre); }
+
+.rdv {
+  width: min(100% - 2 * var(--gouttiere), 720px); margin: 0 auto;
+  padding: 112px 0 72px;
+}
+.rdv h1 { font-size: 2.4rem; text-wrap: balance; }
+.rdv__intro p { max-width: 34em; margin: 16px 0 0; }
+.rdv__tel { color: var(--gris); }
+.rdv__tel a { color: var(--terre); text-decoration: none; }
+
+.rdv__form { display: grid; gap: 48px; margin-top: 48px; }
+.rdv fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.rdv legend { font-size: 1.5rem; padding: 0; margin-bottom: 8px; }
+.aide { color: var(--gris); font-size: 1rem; margin: 0 0 16px; }
+.erreur { color: var(--terre); font-size: 1rem; margin: 12px 0 0; }
+
+/* Grille des disponibilités : jours en lignes, moments en colonnes */
+.grille {
+  display: grid;
+  grid-template-columns: minmax(5.5em, 1fr) repeat(3, minmax(0, 1fr));
+  align-items: center;
+  border-top: 1px solid var(--filet);
+}
+.grille > * { padding: 10px 0; border-bottom: 1px solid var(--filet); min-height: 60px; display: flex; align-items: center; }
+.grille__moment { justify-content: center; color: var(--gris); font-size: 1rem; min-height: 48px; }
+.grille > :nth-child(-n+4) { min-height: 48px; } /* ligne d'en-tête : même hauteur pour que le filet soit continu */
+.grille__jour { font-size: 1.15rem; }
+
+.case { justify-content: center; cursor: pointer; position: relative; }
+.case input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.case__rond {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--encre) 25%, transparent);
+  transition: background .5s, border-color .5s, transform .5s;
+}
+/* les moments reprennent trois encres du schéma */
+.case:nth-child(4n+2) { --encre-case: var(--c-jaune); }
+.case:nth-child(4n+3) { --encre-case: var(--c-orange); }
+.case:nth-child(4n)   { --encre-case: var(--c-violet); }
+.case:hover .case__rond { border-color: var(--encre-case); }
+.case input:checked + .case__rond {
+  background: var(--encre-case); border-color: var(--encre-case);
+  transform: scale(1.12);
+}
+.case input:focus-visible + .case__rond { outline: 2px solid var(--encre); outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Coordonnées */
+.coord { display: grid; gap: 20px; }
+.coord legend { margin-bottom: 4px; }
+.champ { display: grid; gap: 6px; }
+.champ label { font-size: 1.05rem; }
+.facultatif { color: var(--gris); font-size: .9rem; font-style: italic; margin-left: 4px; }
+.champ input:not([type="checkbox"]), .champ textarea {
+  font: inherit; color: var(--encre); background: var(--blanc);
+  border: 1px solid color-mix(in srgb, var(--encre) 22%, transparent); border-radius: 10px;
+  padding: 10px 14px; width: 100%;
+}
+.champ input:focus, .champ textarea:focus { outline: none; border-color: var(--terre); box-shadow: 0 0 0 3px color-mix(in srgb, var(--terre) 18%, transparent); }
+.champ .aide { margin: 2px 0 0; }
+.champ--choix { grid-template-columns: auto 1fr; align-items: center; gap: 12px; }
+.champ--choix input { width: 20px; height: 20px; accent-color: var(--terre); margin: 0; }
+
+.rdv__envoi { display: grid; justify-items: start; gap: 12px; }
+.rdv__envoi .bouton { margin-top: 0; font: inherit; cursor: pointer; padding: 10px 28px; }
+.rdv__envoi .aide { margin: 0; }
+
+.merci { padding-top: 48px; outline: none; }
+.merci h2 { font-size: 1.9rem; margin-bottom: 16px; }
+.merci p { margin: 0 0 12px; max-width: 34em; }
+.merci__recap { color: var(--gris); }
+
+@media (min-width: 768px) {
+  .rdv { padding-top: 140px; }
+  .rdv h1 { font-size: 3rem; }
+  .grille > * { min-height: 64px; }
+}
