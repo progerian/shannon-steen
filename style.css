@@ -271,6 +271,23 @@ section.schema { scroll-margin-top: 0; } /* l'écran du schéma s'aligne pile su
 .creneau:hover { background: color-mix(in srgb, var(--terre) 22%, transparent); }
 .creneau[aria-pressed="true"] { background: var(--terre); }
 .creneau:focus-visible { outline: 2px solid var(--encre); outline-offset: 2px; }
+/* créneau déjà pris dans l'agenda de Shannon : hachuré, non cliquable */
+.creneau--pris, .pastille--pris {
+  background: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--encre) 22%, transparent) 5px 6px);
+  cursor: default;
+}
+.creneau--pris:hover { background: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--encre) 22%, transparent) 5px 6px); }
+
+.agenda__legende {
+  list-style: none; margin: 0; padding: 10px 14px 14px;
+  display: flex; flex-wrap: wrap; gap: 6px 20px; justify-content: center;
+  font-size: .9rem; color: var(--gris); border-top: 1px solid var(--filet);
+}
+.agenda__legende li { display: flex; align-items: center; gap: 8px; }
+.pastille { width: 18px; height: 14px; border-radius: 4px; display: inline-block; }
+.pastille--libre { background: color-mix(in srgb, var(--encre) 5%, transparent); }
+.pastille--choisi { background: var(--terre); }
+.pastille--pris { border: 1px solid color-mix(in srgb, var(--encre) 12%, transparent); }
 
 /* Récapitulatif des créneaux choisis : on peut en retirer un d'un geste */
 .choix { margin-top: 20px; }

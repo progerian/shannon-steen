@@ -39,6 +39,11 @@
           <button type="button" class="agenda__fleche" id="sem-suiv" aria-label="Semaine suivante">→</button>
         </div>
         <div class="agenda__grille" id="agenda" role="group" aria-describedby="aide-dispo"></div>
+        <ul class="agenda__legende" aria-hidden="true">
+          <li><span class="pastille pastille--libre"></span>libre</li>
+          <li><span class="pastille pastille--choisi"></span>votre choix</li>
+          <li><span class="pastille pastille--pris"></span>déjà pris</li>
+        </ul>
       </div>
 
       <div class="choix" id="choix" hidden>
@@ -101,7 +106,13 @@
 
 <script>
   // Agenda : semaines du lundi au samedi, créneaux d'une heure de 9 h à 19 h
+  // Synchronisation avec l'agenda Google de Shannon (à remplir quand elle aura partagé
+  // ses disponibilités) : identifiant de l'agenda + clé d'API limitée au domaine du site.
+  // Tant que c'est vide, la page affiche des créneaux « pris » de démonstration.
+  const GOOGLE = { agenda: '', cle: '' };
+
   const HEURES = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+  let occupe = [];   // plages occupées [{ debut: Date, fin: Date }]
   const NB_SEMAINES = 4;
   const choisis = new Map(); // clé "2026-10-13T10" → libellé lisible
   const jourCourt = new Intl.DateTimeFormat('fr-BE', { weekday: 'short' });
@@ -132,7 +143,14 @@
       jours.forEach(d => {
         const k = `${cle(d)}T${h}`;
         const libelle = `${jourLong.format(d)} à ${h} h`;
-        html += `<button type="button" class="creneau" data-cle="${k}" data-libelle="${libelle}" aria-pressed="${choisis.has(k)}" aria-label="${libelle}"></button>`;
+        const debutC = new Date(d); debutC.setHours(h);
+        const finC = new Date(d); finC.setHours(h + 1);
+        if (occupe.some(p => p.debut < finC && p.fin > debutC)) {
+          choisis.delete(k); // un créneau devenu pris ne peut plus rester choisi
+          html += `<button type="button" class="creneau creneau--pris" disabled aria-label="${libelle}, déjà pris"></button>`;
+        } else {
+          html += `<button type="button" class="creneau" data-cle="${k}" data-libelle="${libelle}" aria-pressed="${choisis.has(k)}" aria-label="${libelle}"></button>`;
+        }
       });
     });
     agenda.innerHTML = html;
@@ -161,7 +179,42 @@
   });
   document.getElementById('sem-prec').addEventListener('click', () => { semaine--; dessiner(); });
   document.getElementById('sem-suiv').addEventListener('click', () => { semaine++; dessiner(); });
+  // Plages occupées : lues dans l'agenda Google (disponibilités publiques), sinon démo
+  async function chargerOccupe() {
+    const fin = new Date(debut); fin.setDate(fin.getDate() + NB_SEMAINES * 7);
+    if (GOOGLE.agenda && GOOGLE.cle) {
+      try {
+        const rep = await fetch(`https://www.googleapis.com/calendar/v3/freeBusy?key=${GOOGLE.cle}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ timeMin: debut.toISOString(), timeMax: fin.toISOString(), timeZone: 'Europe/Brussels', items: [{ id: GOOGLE.agenda }] })
+        });
+        const donnees = await rep.json();
+        occupe = (donnees.calendars?.[GOOGLE.agenda]?.busy || []).map(p => ({ debut: new Date(p.start), fin: new Date(p.end) }));
+      } catch (e) { occupe = []; } // en cas d'échec, on laisse tout libre : Shannon confirme de toute façon par téléphone
+    } else {
+      occupe = demoOccupe();
+    }
+    dessiner();
+    resume();
+  }
+
+  // Démo : quelques rendez-vous réguliers, comme dans un vrai cabinet
+  function demoOccupe() {
+    const plages = [];
+    const regulier = { 1: [[10, 12], [16, 18]], 2: [[9, 11], [14, 15]], 3: [[13, 16]], 4: [[9, 10], [11, 13], [17, 19]], 5: [[15, 18]], 6: [[10, 13]] };
+    for (let i = 0; i < NB_SEMAINES * 7; i++) {
+      const d = new Date(debut); d.setDate(d.getDate() + i);
+      (regulier[d.getDay()] || []).forEach(([a, b], n) => {
+        if ((i + n) % 3 === 2) return; // varie un peu d'une semaine à l'autre
+        const p = new Date(d); p.setHours(a); const q = new Date(d); q.setHours(b);
+        plages.push({ debut: p, fin: q });
+      });
+    }
+    return plages;
+  }
+
   dessiner();
+  chargerOccupe();
 
   // Démo : pas encore d'envoi réel (il faudra brancher l'adresse de Shannon via Formspree ou Web3Forms)
   const form = document.getElementById('demande');
