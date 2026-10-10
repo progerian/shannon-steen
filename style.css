@@ -123,22 +123,23 @@ section[id] { scroll-margin-top: 64px; } /* place pour l'en-tête fixe */
   width: min(100% - 2 * var(--gouttiere), var(--largeur)); margin: 0 auto;
   min-height: 100vh; min-height: 100svh;
   display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-  padding: calc(64px + 3svh) 0 24px; /* 64px = en-tête fixe ; le schéma se place dans le haut de l'écran */
-  scroll-margin-top: 0;
+  padding: 80px 0 32px; /* 64px d'en-tête fixe + 16px : le schéma se place en haut de l'écran */
 }
+section.schema { scroll-margin-top: 0; } /* l'écran du schéma s'aligne pile sur le haut (plus spécifique que section[id]) */
 /* Mobile : le schéma prend presque toute la largeur de l'écran */
 @media (max-width: 767px) {
   /* schéma collé sous l'en-tête et flèche plus proche : la flèche reste visible même sur un écran court */
   .schema { width: 100%; padding-top: 72px; }
-  .constellation { width: min(100% - 24px, calc(100svh - 72px - 32px - 64px - 40px)); }
+  .constellation { width: min(100% - 24px, calc((100svh - 72px - 32px - 64px - 40px) * .94)); }
   .schema__fleche { margin-top: 32px; }
 }
 .constellation {
   margin: 0 auto;
   /* le schéma tient toujours dans l'écran, avec la flèche en dessous */
-  width: min(100%, 920px, calc(100svh - 260px));
+  /* hauteur dispo × 0,94 : le dessin est un peu plus haut que large (890 × 944) */
+  width: min(100%, 920px, calc((100svh - 80px - 48px - 64px - 32px) * .94));
 }
-.schema__fleche { margin-top: 64px; animation: none; }
+.schema__fleche { margin-top: 48px; animation: none; }
 @supports (animation-timeline: view()) {
   .constellation { view-timeline: --constel; }
 }
