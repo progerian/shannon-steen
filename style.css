@@ -228,7 +228,7 @@ section.schema { scroll-margin-top: 0; } /* l'écran du schéma s'aligne pile su
   width: min(100% - 2 * var(--gouttiere), 720px); margin: 0 auto;
   padding: 112px 0 72px;
 }
-.rdv h1 { font-size: 2.4rem; text-wrap: balance; }
+.rdv h1 { font-size: min(2rem, 7.6vw); white-space: nowrap; } /* toujours sur une ligne, même sur petit écran */
 .rdv__intro p { max-width: 34em; margin: 16px 0 0; }
 .rdv__tel { color: var(--gris); }
 .rdv__tel a { color: var(--terre); text-decoration: none; }
