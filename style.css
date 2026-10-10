@@ -239,6 +239,9 @@ section.schema { scroll-margin-top: 0; } /* l'écran du schéma s'aligne pile su
 .aide { color: var(--gris); font-size: 1rem; margin: 0 0 16px; }
 .erreur { color: var(--terre); font-size: 1rem; margin: 12px 0 0; }
 
+/* texte réservé aux lecteurs d'écran */
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
 /* Agenda : jours en colonnes, heures en lignes, comme un agenda papier */
 .agenda { border: 1px solid var(--filet); border-radius: 14px; overflow: hidden; }
 .agenda__nav {

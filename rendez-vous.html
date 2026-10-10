@@ -29,8 +29,7 @@
   <form class="rdv__form" id="demande" novalidate>
 
     <fieldset class="dispo">
-      <legend>Vos disponibilités</legend>
-      <p class="aide" id="aide-dispo">Touchez les heures où vous êtes libre. Vous pouvez en choisir plusieurs, sur plusieurs semaines.</p>
+      <legend class="sr">Vos disponibilités</legend>
 
       <div class="agenda">
         <div class="agenda__nav">
@@ -38,7 +37,7 @@
           <p class="agenda__titre" id="sem-titre" aria-live="polite"></p>
           <button type="button" class="agenda__fleche" id="sem-suiv" aria-label="Semaine suivante">→</button>
         </div>
-        <div class="agenda__grille" id="agenda" role="group" aria-describedby="aide-dispo"></div>
+        <div class="agenda__grille" id="agenda" role="group"></div>
         <ul class="agenda__legende" aria-hidden="true">
           <li><span class="pastille pastille--libre"></span>libre</li>
           <li><span class="pastille pastille--choisi"></span>votre choix</li>
