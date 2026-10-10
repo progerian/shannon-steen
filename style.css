@@ -239,36 +239,49 @@ section.schema { scroll-margin-top: 0; } /* l'écran du schéma s'aligne pile su
 .aide { color: var(--gris); font-size: 1rem; margin: 0 0 16px; }
 .erreur { color: var(--terre); font-size: 1rem; margin: 12px 0 0; }
 
-/* Grille des disponibilités : jours en lignes, moments en colonnes */
-.grille {
-  display: grid;
-  grid-template-columns: minmax(5.5em, 1fr) repeat(3, minmax(0, 1fr));
-  align-items: center;
-  border-top: 1px solid var(--filet);
+/* Agenda : jours en colonnes, heures en lignes, comme un agenda papier */
+.agenda { border: 1px solid var(--filet); border-radius: 14px; overflow: hidden; }
+.agenda__nav {
+  display: grid; grid-template-columns: 44px 1fr 44px; align-items: center;
+  padding: 6px; border-bottom: 1px solid var(--filet);
 }
-.grille > * { padding: 10px 0; border-bottom: 1px solid var(--filet); min-height: 60px; display: flex; align-items: center; }
-.grille__moment { justify-content: center; color: var(--gris); font-size: 1rem; min-height: 48px; }
-.grille > :nth-child(-n+4) { min-height: 48px; } /* ligne d'en-tête : même hauteur pour que le filet soit continu */
-.grille__jour { font-size: 1.15rem; }
+.agenda__titre { margin: 0; text-align: center; font-size: 1.1rem; }
+.agenda__fleche {
+  width: 44px; height: 44px; border: 0; border-radius: 50%; background: none;
+  font: inherit; font-size: 1.3rem; color: var(--terre); cursor: pointer;
+}
+.agenda__fleche:hover:not(:disabled) { background: color-mix(in srgb, var(--terre) 10%, transparent); }
+.agenda__fleche:disabled { color: var(--filet); cursor: default; }
 
-.case { justify-content: center; cursor: pointer; position: relative; }
-.case input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.case__rond {
-  width: 34px; height: 34px; border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--encre) 25%, transparent);
-  transition: background .5s, border-color .5s, transform .5s;
+.agenda__grille {
+  display: grid;
+  grid-template-columns: 40px repeat(6, minmax(0, 1fr));
+  gap: 3px; padding: 8px 8px 10px 4px;
+  font-variant-numeric: tabular-nums;
 }
-/* les moments reprennent trois encres du schéma */
-.case:nth-child(4n+2) { --encre-case: var(--c-jaune); }
-.case:nth-child(4n+3) { --encre-case: var(--c-orange); }
-.case:nth-child(4n)   { --encre-case: var(--c-violet); }
-.case:hover .case__rond { border-color: var(--encre-case); }
-.case input:checked + .case__rond {
-  background: var(--encre-case); border-color: var(--encre-case);
-  transform: scale(1.12);
+.agenda__coin { position: sticky; }
+.agenda__jour { display: grid; justify-items: center; line-height: 1.15; padding-bottom: 6px; color: var(--gris); font-size: .85rem; }
+.agenda__jour b { font-weight: 400; font-size: 1.25rem; color: var(--encre); }
+.agenda__heure { font-size: .85rem; color: var(--gris); text-align: right; padding-right: 6px; align-self: center; }
+.creneau {
+  height: 38px; border: 0; border-radius: 6px; cursor: pointer;
+  background: color-mix(in srgb, var(--encre) 5%, transparent);
+  transition: background .4s, transform .4s;
 }
-.case input:focus-visible + .case__rond { outline: 2px solid var(--encre); outline-offset: 3px; }
-.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.creneau:hover { background: color-mix(in srgb, var(--terre) 22%, transparent); }
+.creneau[aria-pressed="true"] { background: var(--terre); }
+.creneau:focus-visible { outline: 2px solid var(--encre); outline-offset: 2px; }
+
+/* Récapitulatif des créneaux choisis : on peut en retirer un d'un geste */
+.choix { margin-top: 20px; }
+.choix__titre { margin: 0 0 8px; font-size: 1rem; color: var(--gris); }
+.choix__liste { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.choix__liste button {
+  font: inherit; font-size: .95rem; cursor: pointer;
+  border: 1px solid var(--terre); color: var(--terre); background: none;
+  border-radius: 999px; padding: 3px 12px;
+}
+.choix__liste button:hover { background: var(--terre); color: var(--blanc); }
 
 /* Coordonnées */
 .coord { display: grid; gap: 20px; }
@@ -298,5 +311,6 @@ section.schema { scroll-margin-top: 0; } /* l'écran du schéma s'aligne pile su
 @media (min-width: 768px) {
   .rdv { padding-top: 140px; }
   .rdv h1 { font-size: 3rem; }
-  .grille > * { min-height: 64px; }
+  .creneau { height: 42px; }
+  .agenda__grille { grid-template-columns: 56px repeat(6, minmax(0, 1fr)); gap: 4px; padding: 12px 14px 14px 6px; }
 }

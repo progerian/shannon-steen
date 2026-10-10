@@ -22,7 +22,7 @@
 
   <div class="rdv__intro">
     <h1>Demander un rendez-vous</h1>
-    <p>Cochez les moments où vous êtes disponible en général. Je vous rappelle pour convenir ensemble d'une heure précise.</p>
+    <p>Indiquez dans l'agenda les heures où vous êtes libre. Je vous rappelle pour confirmer le rendez-vous.</p>
     <p class="rdv__tel">Vous préférez appeler ? <a href="tel:+32474696812">0474/69.68.12</a></p>
   </div>
 
@@ -30,15 +30,22 @@
 
     <fieldset class="dispo">
       <legend>Vos disponibilités</legend>
-      <p class="aide" id="aide-dispo">Une case ou plusieurs, comme cela vous arrange.</p>
-      <div class="grille" role="group" aria-describedby="aide-dispo">
-        <span></span>
-        <span class="grille__moment">Matin</span>
-        <span class="grille__moment">Après-midi</span>
-        <span class="grille__moment">Soir</span>
-        <!-- lignes générées plus bas : une par jour -->
+      <p class="aide" id="aide-dispo">Touchez les heures où vous êtes libre. Vous pouvez en choisir plusieurs, sur plusieurs semaines.</p>
+
+      <div class="agenda">
+        <div class="agenda__nav">
+          <button type="button" class="agenda__fleche" id="sem-prec" aria-label="Semaine précédente">←</button>
+          <p class="agenda__titre" id="sem-titre" aria-live="polite"></p>
+          <button type="button" class="agenda__fleche" id="sem-suiv" aria-label="Semaine suivante">→</button>
+        </div>
+        <div class="agenda__grille" id="agenda" role="group" aria-describedby="aide-dispo"></div>
       </div>
-      <p class="erreur" id="erreur-dispo" hidden>Cochez au moins un moment.</p>
+
+      <div class="choix" id="choix" hidden>
+        <p class="choix__titre">Vos créneaux</p>
+        <ul class="choix__liste" id="choix-liste"></ul>
+      </div>
+      <p class="erreur" id="erreur-dispo" hidden>Choisissez au moins un créneau.</p>
     </fieldset>
 
     <fieldset class="coord">
@@ -93,36 +100,80 @@
 </footer>
 
 <script>
-  // Grille : une ligne par jour, une case à cocher par moment de la journée
-  const jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-  const moments = ['Matin', 'Après-midi', 'Soir'];
-  const grille = document.querySelector('.grille');
-  jours.forEach(jour => {
-    const nom = document.createElement('span');
-    nom.className = 'grille__jour';
-    nom.textContent = jour;
-    grille.append(nom);
-    moments.forEach(moment => {
-      const id = (jour + '-' + moment).toLowerCase().normalize('NFD').replace(/[^a-z-]/g, '');
-      const case_ = document.createElement('label');
-      case_.className = 'case';
-      case_.htmlFor = id;
-      case_.innerHTML = `<input type="checkbox" id="${id}" name="dispo" value="${jour} ${moment.toLowerCase()}"><span class="case__rond" aria-hidden="true"></span><span class="sr">${jour} ${moment.toLowerCase()}</span>`;
-      grille.append(case_);
+  // Agenda : semaines du lundi au samedi, créneaux d'une heure de 9 h à 19 h
+  const HEURES = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+  const NB_SEMAINES = 4;
+  const choisis = new Map(); // clé "2026-10-13T10" → libellé lisible
+  const jourCourt = new Intl.DateTimeFormat('fr-BE', { weekday: 'short' });
+  const jourLong = new Intl.DateTimeFormat('fr-BE', { weekday: 'long', day: 'numeric', month: 'long' });
+  const mois = new Intl.DateTimeFormat('fr-BE', { day: 'numeric', month: 'long' });
+
+  // premier lundi à venir (demain au plus tôt)
+  const debut = new Date(); debut.setHours(0, 0, 0, 0); debut.setDate(debut.getDate() + 1);
+  while (debut.getDay() !== 1) debut.setDate(debut.getDate() + 1);
+  let semaine = 0;
+
+  // date locale (toISOString passerait en UTC et décalerait d'un jour à Bruxelles)
+  const cle = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const agenda = document.getElementById('agenda');
+
+  function dessiner() {
+    const lundi = new Date(debut); lundi.setDate(lundi.getDate() + semaine * 7);
+    const jours = [...Array(6)].map((_, i) => { const d = new Date(lundi); d.setDate(d.getDate() + i); return d; });
+    const samedi = jours[5];
+    document.getElementById('sem-titre').textContent = `Du ${mois.format(lundi)} au ${mois.format(samedi)}`;
+    document.getElementById('sem-prec').disabled = semaine === 0;
+    document.getElementById('sem-suiv').disabled = semaine === NB_SEMAINES - 1;
+
+    let html = '<span class="agenda__coin"></span>';
+    jours.forEach(d => html += `<span class="agenda__jour"><span>${jourCourt.format(d).replace('.', '')}</span><b>${d.getDate()}</b></span>`);
+    HEURES.forEach(h => {
+      html += `<span class="agenda__heure">${h}h</span>`;
+      jours.forEach(d => {
+        const k = `${cle(d)}T${h}`;
+        const libelle = `${jourLong.format(d)} à ${h} h`;
+        html += `<button type="button" class="creneau" data-cle="${k}" data-libelle="${libelle}" aria-pressed="${choisis.has(k)}" aria-label="${libelle}"></button>`;
+      });
     });
+    agenda.innerHTML = html;
+  }
+
+  function resume() {
+    const liste = document.getElementById('choix-liste');
+    const tri = [...choisis.keys()].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    liste.innerHTML = tri.map(k => `<li><button type="button" data-retire="${k}" aria-label="Retirer ${choisis.get(k)}">${choisis.get(k)} <span aria-hidden="true">×</span></button></li>`).join('');
+    document.getElementById('choix').hidden = choisis.size === 0;
+    if (choisis.size) document.getElementById('erreur-dispo').hidden = true;
+  }
+
+  agenda.addEventListener('click', ev => {
+    const c = ev.target.closest('.creneau'); if (!c) return;
+    const k = c.dataset.cle;
+    if (choisis.has(k)) choisis.delete(k); else choisis.set(k, c.dataset.libelle);
+    c.setAttribute('aria-pressed', choisis.has(k));
+    resume();
   });
+  document.getElementById('choix-liste').addEventListener('click', ev => {
+    const b = ev.target.closest('[data-retire]'); if (!b) return;
+    choisis.delete(b.dataset.retire);
+    const c = agenda.querySelector(`[data-cle="${b.dataset.retire}"]`); if (c) c.setAttribute('aria-pressed', 'false');
+    resume();
+  });
+  document.getElementById('sem-prec').addEventListener('click', () => { semaine--; dessiner(); });
+  document.getElementById('sem-suiv').addEventListener('click', () => { semaine++; dessiner(); });
+  dessiner();
 
   // Démo : pas encore d'envoi réel (il faudra brancher l'adresse de Shannon via Formspree ou Web3Forms)
   const form = document.getElementById('demande');
   form.addEventListener('submit', ev => {
     ev.preventDefault();
-    const choisis = [...form.querySelectorAll('input[name="dispo"]:checked')].map(c => c.value);
     const prenom = form.prenom.value.trim(), tel = form.telephone.value.trim();
-    document.getElementById('erreur-dispo').hidden = choisis.length > 0;
+    document.getElementById('erreur-dispo').hidden = choisis.size > 0;
     document.getElementById('erreur-coord').hidden = Boolean(prenom && tel);
-    if (!choisis.length || !prenom || !tel) return;
+    if (!choisis.size || !prenom || !tel) return;
     document.getElementById('merci-tel').textContent = tel;
-    document.getElementById('merci-dispo').textContent = choisis.join(', ');
+    const tri = [...choisis.keys()].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    document.getElementById('merci-dispo').textContent = tri.map(k => choisis.get(k)).join(' · ');
     form.hidden = true;
     const merci = document.getElementById('merci');
     merci.hidden = false;
